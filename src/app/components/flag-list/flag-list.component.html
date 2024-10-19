@@ -1,0 +1,36 @@
+<div class="mb-4">
+  <label for="language" class="font-semibold mr-2">Langue des pays :</label>
+  <select id="language" [(ngModel)]="selectedLanguage" (change)="changeLanguage()" class="border border-gray-300 rounded px-2 py-1">
+    <option *ngFor="let language of languages" [value]="language.code">{{ language.name }}</option>
+  </select>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <div *ngFor="let country of countries; let i = index" class="flag-item bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="flex justify-center items-center h-32">
+      <img [src]="country.flags.png" [alt]="country.nameInSelectedLanguage" class="h-full object-contain" />
+    </div>
+    <div class="p-4">
+      <ng-container *ngIf="country.guessed; else guessTemplate">
+        <p class="text-green-500 text-lg font-semibold">{{ country.nameInSelectedLanguage }}</p>
+      </ng-container>
+      <ng-template #guessTemplate>
+        <div class="flex items-center">
+          <input
+            #countryInput
+            type="text"
+            [(ngModel)]="country.userInput"
+            (ngModelChange)="checkGuess(country, i)"
+            class="border border-gray-300 rounded px-2 py-1 w-full"
+            placeholder="Guess"
+          />
+          <button
+            (click)="revealAnswer(country)"
+            class="text-white px-4 py-1">
+            🏴‍☠️
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
